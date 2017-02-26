@@ -281,10 +281,5 @@ class GameState(object):
         repr_str += '\nACTIONS: ' + str(sum(self.possible_actions()[0])) + '\n'
         repr_str += 'GOBLINS: ' + str(self.goblins) + '\n'
         repr_str += 'TURN: ' + str(self.turn) + '\n'
-<<<<<<< HEAD
-        return repr_str
-=======
         repr_str += 'OPP LIFETOTAL: ' + str(self.opp_life_total) + '\n'
-
         return repr_str
->>>>>>> 4d5354e4f170b7832218db75dce204ada8d5ecd5
