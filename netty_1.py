@@ -225,8 +225,9 @@ class Netty(object):
         # iterate over batch_indexes
         for batch_index in range(self.number_batches):
             if batch_index * self.batch_size < len(experience_indices):
-                # get tate_input from buffer
+                # calculate experience index
                 experience_index = batch_index * self.batch_size: (batch_index + 1) * self.batch_size
+                # get state_input from buffer
                 state_input = state_input_buffer[experience_indices[experience_index]]
 
                 # get reward from buffer
