@@ -34,6 +34,11 @@ class GameState(object):
     def add_card(self, card, maindeck, sideboard):
         self.cards.append((card, maindeck, sideboard))
 
+    def add_deck(self, deck):
+        deck_list = [self.add_card(card, main_cnt, sb_cnt) for card, (main_cnt, sb_cnt) in deck.items()]
+        print('added {} cards to maindeck'.format(len(deck_list)))
+        return deck_list
+
     def reset_game(self, draw_opening_hand=True, test=False):
         for card, maindeck, sideboard in self.cards:
             self.deck[card.name] = maindeck
