@@ -109,6 +109,8 @@ class GameState(object):
     def state_space(self):
         # We should make it so we can just add em all up for the correct representation.
         # The objects should know
+        # Can we cache this data per episode?
+        # we can provide ways to invalidate cache whenever deck size changes
 
         representation_list = []
         for card, _, _ in self.cards:
