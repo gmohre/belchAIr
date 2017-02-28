@@ -211,7 +211,7 @@ class Netty(object):
         experience_indices = list(range(len(self.reward_buffer)))
         np.random.shuffle(experience_indices)
 
-        # find reward mean and std
+        # calc reward mean and std deviation along reward_buffer
         reward_mean = np.mean(self.reward_buffer)
         reward_std = np.std(self.reward_buffer)
 
@@ -219,37 +219,40 @@ class Netty(object):
         state_input_buffer = np.array(self.state_input_buffer)
         legal_action_buffer = np.array(self.legal_action_buffer)
         reward_buffer = np.array([[x] for x in self.reward_buffer])
+
         # encode action_buffer by one_hot
         action_taken_buffer = one_hot(self.action_taken_buffer, self.action_dim)
 
         # iterate over batch_indexes
         for batch_index in range(self.number_batches):
             if batch_index * self.batch_size < len(experience_indices):
-                # calculate experience index
+                # calc experience index
                 experience_index = batch_index * self.batch_size: (batch_index + 1) * self.batch_size
+                state_input_index = experience_indices[experience_index]
                 # get state_input from buffer
-                state_input = state_input_buffer[experience_indices[experience_index]]
+                state_input = state_input_buffer[state_input_index]
 
                 # get reward from buffer
-                reward = reward_buffer[experience_indices[experience_index]]
+                reward = reward_buffer[state_input_index]
 
                 # get legal_action from buffer
-                legal_actions = legal_action_buffer[experience_indices[experience_index]]
+                legal_actions = legal_action_buffer[state_input_index]
 
                 # get action_taken from buffer
-                action_taken = action_taken_buffer[experience_indices[experience_index]]
+                action_taken = action_taken_buffer[state_input_index]
 
                 # normalize reward
                 reward = (reward-reward_mean) / reward_std
 
+                feed_dict = {
+                    self.state_input: state_input,
+                    self.reward: reward,
+                    self.legal_actions: legal_actions,
+                    self.action_taken: action_taken}
+
                 # run session
-                self.sess.run(self.train_op,
-                              feed_dict={
-                                  self.state_input: state_input,
-                                  self.reward: reward,
-                                  self.legal_actions: legal_actions,
-                                  self.action_taken: action_taken}
-                              )
+                self.sess.run(self.train_op, feed_dict)
+
             #print(self.sess.run(self.mean_loss, feed_dict={self.state_input: state_input,
             #                                        self.reward: reward,
             #                                        self.legal_actions: legal_actions,
