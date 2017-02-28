@@ -1,12 +1,14 @@
 from cards.cards import *
 from game_state import GameState
+from nose.tools import assert_equal
+
 from agent import Agent
 from netty_1 import Netty
 from timeit import timeit
 import numpy as np
 from util import one_hot
-
-class BelchAIrtestClass():
+import unittest
+class BelchAIrtestClass(unittest.TestCase):
     deck_dict = {
         Taiga(): (1, 0),
         ElvishSpiritGuide(): (4, 0),
@@ -40,17 +42,20 @@ class BelchAIrtestClass():
         self.setup_game()
         self.setup_test_gamestate()
 
-    def tearDown(self):
+    def teardown(self):
         del self.game_state
         del self.test_game_state
 
-    def testGamestate(self):
+    def test_gamestate(self):
         self.test_game_state.reset_game(False)
         print('Successfully reset game')
-        assert True
+        assert_equal(True, True)
 
-    def testGame(self):
+    def test_game(self):
         self.game_state.reset_game()
         self.game_state.all_actions()
         print('Sucessfully ran all actions')
-        assert True
+        assert_equal(True, True)
+
+if __name__ == '__main__':
+    unittest.main()
